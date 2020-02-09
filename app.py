@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 response = Response()
 # TODO: use env variables
-db = Database('127.0.0.1', 'nick', 'Gazorpazorp#2020', 'facial_recognition')
+db = Database('127.0.0.1', 'username', 'your_password', 'facial_recognition')
 
 
 @app.route('/add-face', methods=['POST'])
