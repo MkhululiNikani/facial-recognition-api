@@ -18,7 +18,7 @@ class Response:
             "metadata": self.metadata
                     
         }
-        return json.dumps(response)
+        return json.dumps(response), 201
 
     def ok(self, data):
         response = {
@@ -26,7 +26,7 @@ class Response:
             "metadata": self.metadata
                     
         }
-        return json.dumps(response)
+        return json.dumps(response), 200
 
 
     # Errors
@@ -39,7 +39,7 @@ class Response:
             },
             "metadata": self.metadata
         }
-        return json.dumps(error)
+        return json.dumps(error), 400
 
     def unauthorized(self, msg):
         error = {
@@ -50,7 +50,7 @@ class Response:
             },
             "metadata": self.metadata
         }
-        return json.dumps(error)
+        return json.dumps(error), 401
 
     def request_failed(self, msg):
         error = {
@@ -61,7 +61,7 @@ class Response:
             },
             "metadata": self.metadata
         }
-        return json.dumps(error)
+        return json.dumps(error), 402
 
     def forbidden(self, msg):
         error = {
@@ -72,7 +72,7 @@ class Response:
             },
             "metadata": self.metadata
         }
-        return json.dumps(error)
+        return json.dumps(error), 403
 
     def not_found(self, msg):
         error = {
@@ -83,13 +83,13 @@ class Response:
             },
             "metadata": self.metadata
         }
-        return json.dumps(error)
+        return json.dumps(error), 404
 
     # Initialize metadata
     def set_metadata(self):
         self.metadata = {
             "description":"Facial Recognition API",
-            "version": "0.0.1",
+            "version": "1.0",
             "license": "Apache 2.0",
             "author": {
                 "name": "Mkhululi Nikani",

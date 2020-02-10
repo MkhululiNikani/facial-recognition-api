@@ -1,7 +1,6 @@
 import mysql.connector as mysql
 from mysql.connector import errorcode
 import base64
-import pickle
 
 class Database:
 
@@ -11,16 +10,6 @@ class Database:
         self.password = password
         self.database = database
         self.db_conn = None
-
-    # TODO: delete tis method
-    def delete_all(self):
-        self.open_conn()
-        cursor = self.db_conn.cursor()
-        query = ("DELETE FROM faces")
-        cursor.execute(query)
-        self.db_conn.commit()
-        cursor.close()
-        self.close_conn()
 
 
     # Get user face (by user_id)
@@ -51,29 +40,20 @@ class Database:
         cursor.execute(query)
         faces = cursor.fetchall()
 
-        decoded_faces = []
-
-        index = 0
-        while index < len(faces):
-            decoded_faces.append(faces[index])
-
         cursor.close()
         self.close_conn()
 
-        return decoded_faces
+        return faces
 
     # Add a face to the database
     def add_face(self, fullname, face_encoding):
-        face_encoding = self.base64encode(face_encoding)
+        face_encoding = base64.b64encode(face_encoding.dumps())
 
         self.open_conn()
         cursor = self.db_conn.cursor()
 
-        add_face = ("INSERT INTO faces "
-                    "(fullname, face_encoding) "
-                    "VALUES (%s, %s)")
+        add_face = ("INSERT INTO faces (fullname, face_encoding) VALUES (%s, %s)")
 
-        
         face_data = (fullname, face_encoding)
  
         cursor.execute(add_face, face_data)
@@ -105,16 +85,6 @@ class Database:
     def close_conn(self):
         if self.db_conn:
             self.db_conn.close()
-
-
-
-    # Base64 encode face_encoding so they can be stored in the database
-    def base64encode(self, face):
-        return base64.b64encode(face.dumps())
-    
-    def base64decode(self, encoding):
-        return pickle.loads(base64.b64decode(encoding))
-
 
 
     def storeOnS3(self, file):
